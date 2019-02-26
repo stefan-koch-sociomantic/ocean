@@ -196,9 +196,9 @@ public struct BinaryHistogram ( uint MaxPow2, istring Suffix = "" )
 
     public ulong add ( ulong n )
     {
-        this.count++;
-        this.total += n;
-        this.bins[n? (n < (1UL << MaxPow2))? bsr(n) + 1 : $ - 1 : 0]++;
+        (&this).count++;
+        (&this).total += n;
+        (&this).bins[n? (n < (1UL << MaxPow2))? bsr(n) + 1 : $ - 1 : 0]++;
         return n;
     }
 
@@ -212,9 +212,9 @@ public struct BinaryHistogram ( uint MaxPow2, istring Suffix = "" )
 
     public double mean ( )
     {
-        verify(this.count || !this.total);
+        verify((&this).count || !(&this).total);
 
-        return this.total / cast(double)this.count;
+        return (&this).total / cast(double)(&this).count;
     }
 
     /***************************************************************************
@@ -235,8 +235,8 @@ public struct BinaryHistogram ( uint MaxPow2, istring Suffix = "" )
         mixin("static assert(is(typeof(Bins.init." ~ bin_name ~ ")));");
 
         mixin("const offset = Bins.init." ~ bin_name ~ ".offsetof;");
-        enum index = offset / this.bins[0].sizeof;
-        return this.bins[index];
+        enum index = offset / (&this).bins[0].sizeof;
+        return (&this).bins[index];
     }
 
     /***************************************************************************
@@ -248,7 +248,7 @@ public struct BinaryHistogram ( uint MaxPow2, istring Suffix = "" )
 
     public Bins stats ( )
     {
-        return Bins.fromArray(this.bins);
+        return Bins.fromArray((&this).bins);
     }
 }
 

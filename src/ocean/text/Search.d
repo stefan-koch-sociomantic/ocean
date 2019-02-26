@@ -131,7 +131,7 @@ public struct FindFruct(T)
 
     void match (T[] what)
     {
-        this.what = what;
+        (&this).what = what;
     }
 
     /***********************************************************************
@@ -329,8 +329,8 @@ public struct SearchFruct(T)
     void match (Const!(T)[] what)
     {
         offsets[] = what.length + 1;
-        this.fore = true;
-        this.what = what;
+        (&this).fore = true;
+        (&this).what = what;
         reset;
     }
 
@@ -553,7 +553,7 @@ public struct SearchFruct(T)
 
     private void reset ()
     {
-        auto what = cast(char[]) this.what;
+        auto what = cast(char[]) (&this).what;
         if (fore)
             for (ptrdiff_t i=0; i < what.length; ++i)
                 offsets[what[i]] = what.length - i;
